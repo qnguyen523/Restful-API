@@ -39,7 +39,6 @@ app.put('/lions/:id', function (req, res) {
   if (update.id) {
     delete update.id
   }
-  // console.log(update)
   console.log(update.id)
 
   var lion = _.findIndex(lions, { id: req.params.id });
@@ -48,24 +47,27 @@ app.put('/lions/:id', function (req, res) {
   } else {
     var updatedLion = _.assign(lions[lion], update);
     res.json(updatedLion);
-    // res.json(req.lion);
-    res.send("Deleted");
-    console.log("Deleted");
   }
 });
 
 app.delete('/lions/:id', function (req, res) {
   var lion = _.findIndex(lions, { id: req.params.id });
-  console.log(lion);
-  console.log(lions[lion]);
-  lions.splice(lion, 1);
-  res.json(req.lion);
+  if (!lions[lion]) {
+    console.log("Error in deleting the lion");
+    res.send("Error in deleting the lion");
+  }
+  else
+  { 
+    console.log(lions[lion]);
+    console.log("successfully deleted")
+    res.send(lions[lion]);
+    lions.splice(lion, 1);
+  }
 });
 
 app.set('port', (process.env.PORT || 8080));
 
 app.listen(app.get('port'), function () {
   console.log("Node app is running at localhost:" + app.get('port'));
-  console.log("Testing");
 });
 
